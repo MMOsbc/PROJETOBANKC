@@ -107,3 +107,32 @@ void debito(clientedesc *Clientes) {
         printf("Cliente não encontrado.\n");
     }
 }
+void deposito(clientedesc *Clientes) {
+    long cpf;
+    double valor;
+
+    printf("Digite o seu CPF: ");
+    scanf("%ld", &cpf);
+
+    int index = -1;
+    for (int i = 0; i < 1000; i++) {
+        if (Clientes[i].cpf == cpf) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1) {
+        printf("Digite o valor a ser depositado: ");
+        scanf("%lf", &valor);
+
+        if (valor > 0) {
+            Clientes[index].saldoatual += valor;
+            printf("Depósito realizado com sucesso. Novo saldo: %.2f\n", Clientes[index].saldoatual);
+        } else {
+            printf("Valor inválido.\n");
+        }
+    } else {
+        printf("Cliente não encontrado.\n");
+    }
+}
