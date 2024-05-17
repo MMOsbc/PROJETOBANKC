@@ -114,10 +114,11 @@ void debito(clientedesc *Clientes) {
 void deposito(clientedesc *Clientes) {
     long cpf;
     double valor;
+    // Solicita e lê o CPF do cliente
 
     printf("Digite o seu CPF: ");
     scanf("%ld", &cpf);
-
+ // Procura o cliente pelo CPF
     int index = -1;
     for (int i = 0; i < 1000; i++) {
         if (Clientes[i].cpf == cpf) {
@@ -125,11 +126,12 @@ void deposito(clientedesc *Clientes) {
             break;
         }
     }
-
+ // Verifica se o cliente foi encontrado
     if (index != -1) {
+         // Solicita e lê o valor a ser depositado
         printf("Digite o valor a ser depositado: ");
         scanf("%lf", &valor);
-
+ // Verifica se o valor é válido e realiza o depósito
         if (valor > 0) {
             Clientes[index].saldoatual += valor;
             printf("Depósito realizado com sucesso. Novo saldo: %.2f\n", Clientes[index].saldoatual);
