@@ -3,33 +3,37 @@
 #include <stdlib.h>
 #include <string.h>
 #include "funcoes.h"
-
-void NovoCliente(totalclientes *Clientes) {
+// Função para cadastrar um novo cliente
+void NovoCliente(totalclientes *Clientes) 
+ // Verifica se o limite de clientes foi atingido{
     if (Clientes->qtd >= 1000) {
         printf("Você ultrapassou o limite de clientes.\n");
         return;
     }
-
+ // Declaração de uma variável para armazenar os dados do novo cliente
     clientedesc NovoCliente;
-
+ // Solicita e lê o nome do cliente
     printf("Digite o seu nome: ");
     scanf("%s", NovoCliente.nome);
-
+// Solicita e lê o CPF do cliente
     printf("Digite seu CPF: ");
     scanf("%ld", &NovoCliente.cpf);
-
+// Solicita e lê o tipo de conta do cliente
     printf("Qual seria seu tipo de conta?\n1 - Conta comum\n2 - Conta Plus com benefícios\n");
     scanf("%d", &NovoCliente.tipodeconta);
-
+ // Solicita e lê o valor inicial da conta do cliente
     printf("Qual será o seu valor inicial? ");
     scanf("%lf", &NovoCliente.valorinicial);
-
+   // Solicita e lê a senha do cliente
     printf("Qual será sua senha de segurança com até 10 dígitos: ");
     scanf("%s", NovoCliente.senha);
-
+ // Define o saldo atual do cliente como o valor inicial
     NovoCliente.saldoatual = NovoCliente.valorinicial;
+     // Adiciona o novo cliente à lista de clientes e incrementa o contador de clientes
     Clientes->Clientes[Clientes->qtd] = NovoCliente;
     Clientes->qtd++;
+        // Mensagem de sucesso
+
     printf("Cliente cadastrado com sucesso.\n");
 }
 
