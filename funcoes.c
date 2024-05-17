@@ -136,3 +136,33 @@ void deposito(clientedesc *Clientes) {
         printf("Cliente não encontrado.\n");
     }
 }
+void extrato(clientedesc *Clientes) {
+    long cpf;
+    char senha[11];
+
+    printf("Digite o seu CPF: ");
+    scanf("%ld", &cpf);
+
+    int index = -1;
+    for (int i = 0; i < 1000; i++) {
+        if (Clientes[i].cpf == cpf) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1) {
+        printf("Digite a senha: ");
+        scanf("%s", senha);
+
+        if (strcmp(Clientes[index].senha, senha) == 0) {
+            printf("Extrato do cliente %s (CPF: %ld)\n", Clientes[index].nome, cpf);
+            printf("Saldo Inicial: %.2f\n", Clientes[index].valorinicial);
+            printf("Saldo Final: %.2f\n", Clientes[index].saldoatual);
+        } else {
+            printf("Senha incorreta. Operação cancelada.\n");
+        }
+    } else {
+        printf("Cliente não encontrado.\n");
+    }
+}
