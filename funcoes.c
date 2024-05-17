@@ -166,3 +166,56 @@ void extrato(clientedesc *Clientes) {
         printf("Cliente não encontrado.\n");
     }
 }
+void transferencia(clientedesc *Clientes) {
+    long cpfOrigem, cpfDestino;
+    char senhaOrigem[11];
+    double valor;
+
+    printf("Digite o seu CPF (Origem): ");
+    scanf("%ld", &cpfOrigem);
+
+    int indexOrigem = -1;
+    for (int i = 0; i < 1000; i++) {
+        if (Clientes[i].cpf == cpfOrigem) {
+            indexOrigem = i;
+            break;
+        }
+    }
+
+    if (indexOrigem != -1) {
+        printf("Digite a senha (Origem): ");
+        scanf("%s", senhaOrigem);
+
+        if (strcmp(Clientes[indexOrigem].senha, senhaOrigem) == 0) {
+            printf("Digite o CPF (Destino): ");
+            scanf("%ld", &cpfDestino);
+
+            int indexDestino = -1;
+            for (int i = 0; i < 1000; i++) {
+                if (Clientes[i].cpf == cpfDestino) {
+                    indexDestino = i;
+                    break;
+                }
+            }
+
+            if (indexDestino != -1) {
+                printf("Digite o valor a ser transferido: ");
+                scanf("%lf", &valor);
+
+                if (valor > 0 && valor <= Clientes[indexOrigem].saldoatual) {
+                    Clientes[indexOrigem].saldoatual -= valor;
+                    Clientes[indexDestino].saldoatual += valor;
+                    printf("Transferência realizada com sucesso.\n");
+                } else {
+                    printf("Valor inválido ou insuficiente na conta de origem.\n");
+                }
+            } else {
+                printf("Conta de destino não encontrada.\n");
+            }
+        } else {
+            printf("Senha incorreta da conta de origem. Operação cancelada.\n");
+        }
+    } else {
+        printf("Conta de origem não encontrada.\n");
+    }
+}
