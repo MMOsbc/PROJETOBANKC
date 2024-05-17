@@ -140,12 +140,16 @@ void deposito(clientedesc *Clientes) {
         printf("Cliente não encontrado.\n");
     }
 }
+// Função para mostrar o extrato de um cliente
+
 void extrato(clientedesc *Clientes) {
     long cpf;
     char senha[11];
+    // Solicita e lê o CPF do cliente
 
     printf("Digite o seu CPF: ");
     scanf("%ld", &cpf);
+    // Procura o cliente pelo CPF
 
     int index = -1;
     for (int i = 0; i < 1000; i++) {
@@ -154,15 +158,19 @@ void extrato(clientedesc *Clientes) {
             break;
         }
     }
+    // Verifica se o cliente foi encontrado
 
     if (index != -1) {
         printf("Digite a senha: ");
         scanf("%s", senha);
+        // Verifica se a senha está correta
+       
 
         if (strcmp(Clientes[index].senha, senha) == 0) {
             printf("Extrato do cliente %s (CPF: %ld)\n", Clientes[index].nome, cpf);
             printf("Saldo Inicial: %.2f\n", Clientes[index].valorinicial);
             printf("Saldo Final: %.2f\n", Clientes[index].saldoatual);
+                 // Mostra o extrato do cliente
         } else {
             printf("Senha incorreta. Operação cancelada.\n");
         }
@@ -170,11 +178,12 @@ void extrato(clientedesc *Clientes) {
         printf("Cliente não encontrado.\n");
     }
 }
+// Função para realizar uma transferência entre contas
 void transferencia(clientedesc *Clientes) {
     long cpfOrigem, cpfDestino;
     char senhaOrigem[11];
     double valor;
-
+// Solicita e lê o CPF da conta de origem
     printf("Digite o seu CPF (Origem): ");
     scanf("%ld", &cpfOrigem);
 
@@ -185,15 +194,17 @@ void transferencia(clientedesc *Clientes) {
             break;
         }
     }
-
+ // Verifica se a conta de origem foi encontrada
     if (indexOrigem != -1) {
         printf("Digite a senha (Origem): ");
         scanf("%s", senhaOrigem);
+          // Verifica se a senha da conta de origem está correta
 
         if (strcmp(Clientes[indexOrigem].senha, senhaOrigem) == 0) {
+            // Solicita e lê o CPF da conta de destino
             printf("Digite o CPF (Destino): ");
             scanf("%ld", &cpfDestino);
-
+ // Procura o cliente pelo CPF da conta de destino
             int indexDestino = -1;
             for (int i = 0; i < 1000; i++) {
                 if (Clientes[i].cpf == cpfDestino) {
@@ -201,11 +212,12 @@ void transferencia(clientedesc *Clientes) {
                     break;
                 }
             }
-
+// Verifica se a conta de destino foi encontrada
             if (indexDestino != -1) {
+                // Solicita e lê o valor a ser transferido
                 printf("Digite o valor a ser transferido: ");
                 scanf("%lf", &valor);
-
+// Verifica se o valor é válido e realiza a transferência
                 if (valor > 0 && valor <= Clientes[indexOrigem].saldoatual) {
                     Clientes[indexOrigem].saldoatual -= valor;
                     Clientes[indexDestino].saldoatual += valor;
@@ -223,14 +235,15 @@ void transferencia(clientedesc *Clientes) {
         printf("Conta de origem não encontrada.\n");
     }
 }
+// Função para salvar os dados dos clientes em um arquivo binário
 void salvarClientes(totalclientes *Clientes) {
     FILE *arquivo = fopen("clientes.bin", "wb");
-
+   // Abre o arquivo para escrita binária
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo para salvar os clientes.\n");
         return;
     }
-
+ // Verifica se o arquivo foi aberto corretamente
     if (fwrite(Clientes, sizeof(totalclientes), 1, arquivo) == 1) {
         fclose(arquivo);
         printf("Os Dados foram salvos com sucesso.\n");
