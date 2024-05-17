@@ -36,13 +36,14 @@ void NovoCliente(totalclientes *Clientes)
 
     printf("Cliente cadastrado com sucesso.\n");
 }
+// Função para listar todos os clientes cadastrados
 
-void Listarclientes(totalclientes *TodosClientes) {
+void Listarclientes(totalclientes *TodosClientes) {// Verifica se não há clientes cadastrados
     if (TodosClientes->qtd == 0) {
         printf("Nenhum cliente encontrado.\n");
         return;
     }
-
+// Imprime os dados de todos os clientes cadastrados
     printf("Aqui está a lista de todos os seus clientes:\n");
 
     for (int i = 0; i < TodosClientes->qtd; i++) {
@@ -53,8 +54,9 @@ void Listarclientes(totalclientes *TodosClientes) {
         printf("Saldo atual: %.2f\n\n", TodosClientes->Clientes[i].saldoatual);
     }
 }
-
+// Função para remover um cliente com base no CPF
 void ApagarCliente(totalclientes *TodosClientes, long cpf) {
+    // Procura o cliente pelo CPF
     int index = -1;
     for (int i = 0; i < TodosClientes->qtd; i++) {
         if (TodosClientes->Clientes[i].cpf == cpf) {
@@ -62,7 +64,7 @@ void ApagarCliente(totalclientes *TodosClientes, long cpf) {
             break;
         }
     }
-
+  // Remove o cliente se encontrado
     if (index != -1) {
         for (int i = index; i < TodosClientes->qtd - 1; i++) {
             TodosClientes->Clientes[i] = TodosClientes->Clientes[i + 1];
