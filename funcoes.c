@@ -49,3 +49,23 @@ void Listarclientes(totalclientes *TodosClientes) {
         printf("Saldo atual: %.2f\n\n", TodosClientes->Clientes[i].saldoatual);
     }
 }
+
+void ApagarCliente(totalclientes *TodosClientes, long cpf) {
+    int index = -1;
+    for (int i = 0; i < TodosClientes->qtd; i++) {
+        if (TodosClientes->Clientes[i].cpf == cpf) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index != -1) {
+        for (int i = index; i < TodosClientes->qtd - 1; i++) {
+            TodosClientes->Clientes[i] = TodosClientes->Clientes[i + 1];
+        }
+        TodosClientes->qtd--;
+        printf("Cliente removido com sucesso.\n");
+    } else {
+        printf("Cliente não encontrado.\n");
+    }
+}
