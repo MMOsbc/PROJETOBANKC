@@ -239,15 +239,17 @@ void salvarClientes(totalclientes *Clientes) {
         printf("Erro ao salvar os dados.\n");
     }
 }
-void carregarClientes(totalclientes *Clientes) {
+// Função para carregar os dados dos clientes de um arquivo binário
+void carregarClientes(totalclientes *Clientes) 
+  // Abre o arquivo para leitura binária{
     FILE *arquivo = fopen("clientes.bin", "rb");
-
+ // Verifica se o arquivo foi aberto corretamente
     if (arquivo == NULL) {
         printf("Arquivo não encontrado. Criando novo arquivo...\n");
         salvarClientes(Clientes);
         return;
     }
-
+// Lê os dados dos clientes do arquivo
     if (fread(Clientes, sizeof(totalclientes), 1, arquivo) == 1) {
         fclose(arquivo);
         printf("Dados carregados com sucesso!\n");
