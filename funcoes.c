@@ -219,3 +219,19 @@ void transferencia(clientedesc *Clientes) {
         printf("Conta de origem não encontrada.\n");
     }
 }
+void salvarClientes(totalclientes *Clientes) {
+    FILE *arquivo = fopen("clientes.bin", "wb");
+
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo para salvar os clientes.\n");
+        return;
+    }
+
+    if (fwrite(Clientes, sizeof(totalclientes), 1, arquivo) == 1) {
+        fclose(arquivo);
+        printf("Os Dados foram salvos com sucesso.\n");
+    } else {
+        fclose(arquivo);
+        printf("Erro ao salvar os dados.\n");
+    }
+}
