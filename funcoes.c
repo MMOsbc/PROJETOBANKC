@@ -235,3 +235,20 @@ void salvarClientes(totalclientes *Clientes) {
         printf("Erro ao salvar os dados.\n");
     }
 }
+void carregarClientes(totalclientes *Clientes) {
+    FILE *arquivo = fopen("clientes.bin", "rb");
+
+    if (arquivo == NULL) {
+        printf("Arquivo não encontrado. Criando novo arquivo...\n");
+        salvarClientes(Clientes);
+        return;
+    }
+
+    if (fread(Clientes, sizeof(totalclientes), 1, arquivo) == 1) {
+        fclose(arquivo);
+        printf("Dados carregados com sucesso!\n");
+    } else {
+        fclose(arquivo);
+        printf("Erro ao carregar os dados.\n");
+    }
+}
