@@ -75,15 +75,16 @@ void ApagarCliente(totalclientes *TodosClientes, long cpf) {
         printf("Cliente não encontrado.\n");
     }
 }
+// Função para realizar uma operação de débito na conta de um cliente
 
 void debito(clientedesc *Clientes) {
     long cpf;
     char senha[11];
     double valor;
-
+// Solicita e lê o CPF do cliente
     printf("Digite o seu CPF: ");
     scanf("%ld", &cpf);
-
+    // Procura o cliente pelo CPF
     int index = -1;
     for (int i = 0; i < 1000; i++) {
         if (Clientes[i].cpf == cpf) {
@@ -91,15 +92,16 @@ void debito(clientedesc *Clientes) {
             break;
         }
     }
-
+    // Verifica se o cliente foi encontrado
+      // Solicita e lê a senha do cliente
     if (index != -1) {
         printf("Digite a senha: ");
         scanf("%s", senha);
-
+// Verifica se a senha está correta
         if (strcmp(Clientes[index].senha, senha) == 0) {
             printf("Digite o valor a ser debitado: ");
             scanf("%lf", &valor);
-
+// Verifica se o valor é válido e realiza o débito
             if (valor > 0 && valor <= Clientes[index].saldoatual) {
                 Clientes[index].saldoatual -= valor;
                 printf("Débito realizado com sucesso. Novo saldo: %.2f\n", Clientes[index].saldoatual);
