@@ -32,3 +32,20 @@ void NovoCliente(totalclientes *Clientes) {
     Clientes->qtd++;
     printf("Cliente cadastrado com sucesso.\n");
 }
+
+void Listarclientes(totalclientes *TodosClientes) {
+    if (TodosClientes->qtd == 0) {
+        printf("Nenhum cliente encontrado.\n");
+        return;
+    }
+
+    printf("Aqui está a lista de todos os seus clientes:\n");
+
+    for (int i = 0; i < TodosClientes->qtd; i++) {
+        printf("Nome: %s\n", TodosClientes->Clientes[i].nome);
+        printf("CPF: %ld\n", TodosClientes->Clientes[i].cpf);
+        printf("Tipo de conta: %d\n", TodosClientes->Clientes[i].tipodeconta);
+        printf("Valor inicial: %.2lf\n", TodosClientes->Clientes[i].valorinicial);
+        printf("Saldo atual: %.2f\n\n", TodosClientes->Clientes[i].saldoatual);
+    }
+}
