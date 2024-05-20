@@ -2,39 +2,10 @@
 #include <stdlib.h>      // Inclui a biblioteca padrão de funções úteis
 #include "funcoes.h"    // Inclui o arquivo de cabeçalho que contém as definições das funções e estruturas utilizadas
 
-void salvarClientes(totalclientes *Clientes) {
-    FILE *arquivo = fopen("clientes.dat", "wb");    // Abre o arquivo para escrita binária
-
-    if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo para salvar os clientes.\n");   // Exibe mensagem de erro se não for possível abrir o arquivo
-        return;
-    }
-
-    if (fwrite(Clientes, sizeof(totalclientes), 1, arquivo) == 1) {    // Escreve os dados dos clientes no arquivo
-        fclose(arquivo);    // Fecha o arquivo após a escrita
-        printf("Os Dados foram salvos com sucesso.\n");   // Exibe mensagem de sucesso
-    } else {
-        fclose(arquivo);    // Fecha o arquivo em caso de erro
-        printf("Erro ao salvar os dados.\n");    // Exibe mensagem de erro
-    }
-}
-
-void carregarClientes(totalclientes *Clientes) {
-    FILE *arquivo = fopen("clientes.dat", "rb");    // Abre o arquivo para leitura binária
-
-    if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo para carregar os clientes.\n");   // Exibe mensagem de erro se não for possível abrir o arquivo
-        return;
-    }
-
-    if (fread(Clientes, sizeof(totalclientes), 1, arquivo) == 1) {    // Lê os dados dos clientes do arquivo
-        fclose(arquivo);    // Fecha o arquivo após a leitura
-        printf("Dados carregados com sucesso!\n");   // Exibe mensagem de sucesso
-    } else {
-        fclose(arquivo);    // Fecha o arquivo em caso de erro
-        printf("Erro ao carregar os dados.\n");    // Exibe mensagem de erro
-    }
-}
+// Function to save client data to a file
+void salvarClientes(totalclientes *Clientes);
+// Function to load client data from a file
+void carregarClientes(totalclientes *Clientes);
 
 int main() {
     totalclientes TodosClientes;    // Declara uma estrutura para armazenar todos os clientes
