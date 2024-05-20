@@ -12,7 +12,7 @@ void NovoCliente(totalclientes *Clientes) {
 // verifica se está na quantidade máxima
     clientedesc NovoCliente;
 // exige informacoes para cadastro
-    printf("Digite o nome do cliente: ");
+    printf("Digite o primeiro nome do cliente: ");
     scanf("%s", NovoCliente.nome);
 
     printf("Digite o CPF do cliente: ");
