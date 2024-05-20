@@ -3,60 +3,55 @@
 #include <stdlib.h>
 #include <string.h>
 #include "funcoes.h"
-// Função para cadastrar um novo cliente
-void NovoCliente(totalclientes *Clientes) 
- // Verifica se o limite de clientes foi atingido{
-    if (Clientes->qtd >= 1000) {
-        printf("Você ultrapassou o limite de clientes.\n");
+// funcao que cadastra novo cliente
+void NovoCliente(totalclientes *Clientes) {
+    if (Clientes->qtd >= MAX_CLIENTES) {
+        printf("Limite máximo de clientes atingido.\n");
         return;
     }
- // Declaração de uma variável para armazenar os dados do novo cliente
+// verifica se está na quantidade máxima
     clientedesc NovoCliente;
- // Solicita e lê o nome do cliente
-    printf("Digite o seu nome: ");
+// exige informacoes para cadastro
+    printf("Digite o nome do cliente: ");
     scanf("%s", NovoCliente.nome);
-// Solicita e lê o CPF do cliente
-    printf("Digite seu CPF: ");
+
+    printf("Digite o CPF do cliente: ");
     scanf("%ld", &NovoCliente.cpf);
-// Solicita e lê o tipo de conta do cliente
-    printf("Qual seria seu tipo de conta?\n1 - Conta comum\n2 - Conta Plus com benefícios\n");
+
+    printf("Qual o tipo de conta?\n1 - Comum\n2 - Plus\n");
     scanf("%d", &NovoCliente.tipodeconta);
- // Solicita e lê o valor inicial da conta do cliente
-    printf("Qual será o seu valor inicial? ");
+
+    printf("Qual o valor inicial da conta? ");
     scanf("%lf", &NovoCliente.valorinicial);
-   // Solicita e lê a senha do cliente
-    printf("Qual será sua senha de segurança com até 10 dígitos: ");
+
+    printf("Digite a senha (até 10 dígitos): ");
     scanf("%s", NovoCliente.senha);
- // Define o saldo atual do cliente como o valor inicial
+// cria o cliente 
     NovoCliente.saldoatual = NovoCliente.valorinicial;
-     // Adiciona o novo cliente à lista de clientes e incrementa o contador de clientes
     Clientes->Clientes[Clientes->qtd] = NovoCliente;
     Clientes->qtd++;
-        // Mensagem de sucesso
-
     printf("Cliente cadastrado com sucesso.\n");
 }
-// Função para listar todos os clientes cadastrados
-
-void Listarclientes(totalclientes *TodosClientes) {// Verifica se não há clientes cadastrados
+// funcao para listar todos clientes
+void Listarclientes(totalclientes *TodosClientes) {
     if (TodosClientes->qtd == 0) {
         printf("Nenhum cliente encontrado.\n");
         return;
     }
-// Imprime os dados de todos os clientes cadastrados
-    printf("Aqui está a lista de todos os seus clientes:\n");
+
+    printf("Lista de clientes:\n");
+    //intera no array para printar todos clientes e info de conta
 
     for (int i = 0; i < TodosClientes->qtd; i++) {
         printf("Nome: %s\n", TodosClientes->Clientes[i].nome);
         printf("CPF: %ld\n", TodosClientes->Clientes[i].cpf);
-        printf("Tipo de conta: %d\n", TodosClientes->Clientes[i].tipodeconta);
+        printf("Tipo de conta: %s\n", TodosClientes->Clientes[i].tipodeconta == 1 ? "Comum" : "Plus");
         printf("Valor inicial: %.2lf\n", TodosClientes->Clientes[i].valorinicial);
         printf("Saldo atual: %.2f\n\n", TodosClientes->Clientes[i].saldoatual);
     }
 }
-// Função para remover um cliente com base no CPF
+// apaga cliente com base no cpf
 void ApagarCliente(totalclientes *TodosClientes, long cpf) {
-    // Procura o cliente pelo CPF
     int index = -1;
     for (int i = 0; i < TodosClientes->qtd; i++) {
         if (TodosClientes->Clientes[i].cpf == cpf) {
@@ -64,7 +59,7 @@ void ApagarCliente(totalclientes *TodosClientes, long cpf) {
             break;
         }
     }
-  // Remove o cliente se encontrado
+
     if (index != -1) {
         for (int i = index; i < TodosClientes->qtd - 1; i++) {
             TodosClientes->Clientes[i] = TodosClientes->Clientes[i + 1];
@@ -75,38 +70,39 @@ void ApagarCliente(totalclientes *TodosClientes, long cpf) {
         printf("Cliente não encontrado.\n");
     }
 }
-// Função para realizar uma operação de débito na conta de um cliente
-
-void debito(clientedesc *Clientes) {
+// funcao debito
+void debito(totalclientes *Clientes) {
     long cpf;
     char senha[11];
     double valor;
-// Solicita e lê o CPF do cliente
+// cria variaveis sem ser global para usar na função
     printf("Digite o seu CPF: ");
     scanf("%ld", &cpf);
-    // Procura o cliente pelo CPF
+
     int index = -1;
-    for (int i = 0; i < 1000; i++) {
-        if (Clientes[i].cpf == cpf) {
+    for (int i = 0; i < Clientes->qtd; i++) {
+        if (Clientes->Clientes[i].cpf == cpf) {
             index = i;
             break;
         }
     }
-    // Verifica se o cliente foi encontrado
-      // Solicita e lê a senha do cliente
+// confere a senha do cpf digitado
     if (index != -1) {
         printf("Digite a senha: ");
         scanf("%s", senha);
-// Verifica se a senha está correta
-        if (strcmp(Clientes[index].senha, senha) == 0) {
+// solicita o valor desejado e adiciona a taxa
+        if (strcmp(Clientes->Clientes[index].senha, senha) == 0) {
             printf("Digite o valor a ser debitado: ");
             scanf("%lf", &valor);
-// Verifica se o valor é válido e realiza o débito
-            if (valor > 0 && valor <= Clientes[index].saldoatual) {
-                Clientes[index].saldoatual -= valor;
-                printf("Débito realizado com sucesso. Novo saldo: %.2f\n", Clientes[index].saldoatual);
+
+            double taxa = (Clientes->Clientes[index].tipodeconta == 1) ? 0.05 : 0.03;
+            double saldo_atual = Clientes->Clientes[index].saldoatual - valor - (valor * taxa);
+//confere se o valor esta dentro dos limites
+            if (saldo_atual >= -MAX_SALDO_COMUM && saldo_atual >= -MAX_SALDO_PLUS) {
+                Clientes->Clientes[index].saldoatual = saldo_atual;
+                printf("Débito realizado com sucesso. Novo saldo: %.2f\n", saldo_atual);
             } else {
-                printf("Valor inválido ou insuficiente na conta.\n");
+                printf("Limite de saldo excedido.\n");
             }
         } else {
             printf("Senha incorreta. Operação cancelada.\n");
@@ -115,30 +111,29 @@ void debito(clientedesc *Clientes) {
         printf("Cliente não encontrado.\n");
     }
 }
-void deposito(clientedesc *Clientes) {
+// deposita no cpf desejado
+void deposito(totalclientes *Clientes) {
     long cpf;
     double valor;
-    // Solicita e lê o CPF do cliente
 
     printf("Digite o seu CPF: ");
     scanf("%ld", &cpf);
- // Procura o cliente pelo CPF
+
     int index = -1;
-    for (int i = 0; i < 1000; i++) {
-        if (Clientes[i].cpf == cpf) {
+    for (int i = 0; i < Clientes->qtd; i++) {
+        if (Clientes->Clientes[i].cpf == cpf) {
             index = i;
             break;
         }
     }
- // Verifica se o cliente foi encontrado
+
     if (index != -1) {
-         // Solicita e lê o valor a ser depositado
         printf("Digite o valor a ser depositado: ");
         scanf("%lf", &valor);
- // Verifica se o valor é válido e realiza o depósito
+
         if (valor > 0) {
-            Clientes[index].saldoatual += valor;
-            printf("Depósito realizado com sucesso. Novo saldo: %.2f\n", Clientes[index].saldoatual);
+            Clientes->Clientes[index].saldoatual += valor;
+            printf("Depósito realizado com sucesso. Novo saldo: %.2f\n", Clientes->Clientes[index].saldoatual);
         } else {
             printf("Valor inválido.\n");
         }
@@ -146,37 +141,30 @@ void deposito(clientedesc *Clientes) {
         printf("Cliente não encontrado.\n");
     }
 }
-// Função para mostrar o extrato de um cliente
 
-void extrato(clientedesc *Clientes) {
+void extrato(totalclientes *Clientes) {
     long cpf;
     char senha[11];
-    // Solicita e lê o CPF do cliente
-
+// extrato do cliente com a primeiro valor e o atual
     printf("Digite o seu CPF: ");
     scanf("%ld", &cpf);
-    // Procura o cliente pelo CPF
-
+// com base no cpf indicado solicita senha e intera sobre a primeira e ultima transação após confirmação de dados
     int index = -1;
-    for (int i = 0; i < 1000; i++) {
-        if (Clientes[i].cpf == cpf) {
+    for (int i = 0; i < Clientes->qtd; i++) {
+        if (Clientes->Clientes[i].cpf == cpf) {
             index = i;
             break;
         }
     }
-    // Verifica se o cliente foi encontrado
 
     if (index != -1) {
         printf("Digite a senha: ");
         scanf("%s", senha);
-        // Verifica se a senha está correta
-       
 
-        if (strcmp(Clientes[index].senha, senha) == 0) {
-            printf("Extrato do cliente %s (CPF: %ld)\n", Clientes[index].nome, cpf);
-            printf("Saldo Inicial: %.2f\n", Clientes[index].valorinicial);
-            printf("Saldo Final: %.2f\n", Clientes[index].saldoatual);
-                 // Mostra o extrato do cliente
+        if (strcmp(Clientes->Clientes[index].senha, senha) == 0) {
+            printf("Extrato do cliente %s (CPF: %ld)\n", Clientes->Clientes[index].nome, cpf);
+            printf("Saldo Inicial: %.2f\n", Clientes->Clientes[index].valorinicial);
+            printf("Saldo Final: %.2f\n", Clientes->Clientes[index].saldoatual);
         } else {
             printf("Senha incorreta. Operação cancelada.\n");
         }
@@ -184,52 +172,52 @@ void extrato(clientedesc *Clientes) {
         printf("Cliente não encontrado.\n");
     }
 }
-// Função para realizar uma transferência entre contas
-void transferencia(clientedesc *Clientes) {
+// funcao de transferência
+void transferencia(totalclientes *Clientes) {
     long cpfOrigem, cpfDestino;
     char senhaOrigem[11];
     double valor;
-// Solicita e lê o CPF da conta de origem
+// solicita cpf
     printf("Digite o seu CPF (Origem): ");
     scanf("%ld", &cpfOrigem);
-
+// intera sobre clientes para identificar o cpf
     int indexOrigem = -1;
-    for (int i = 0; i < 1000; i++) {
-        if (Clientes[i].cpf == cpfOrigem) {
+    for (int i = 0; i < Clientes->qtd; i++) {
+        if (Clientes->Clientes[i].cpf == cpfOrigem) {
             indexOrigem = i;
             break;
         }
     }
- // Verifica se a conta de origem foi encontrada
+// após indicado o cpf solicita senha para confirmação
     if (indexOrigem != -1) {
         printf("Digite a senha (Origem): ");
         scanf("%s", senhaOrigem);
-          // Verifica se a senha da conta de origem está correta
-
-        if (strcmp(Clientes[indexOrigem].senha, senhaOrigem) == 0) {
-            // Solicita e lê o CPF da conta de destino
+// solicita cpf de destino
+        if (strcmp(Clientes->Clientes[indexOrigem].senha, senhaOrigem) == 0) {
             printf("Digite o CPF (Destino): ");
             scanf("%ld", &cpfDestino);
- // Procura o cliente pelo CPF da conta de destino
+
             int indexDestino = -1;
-            for (int i = 0; i < 1000; i++) {
-                if (Clientes[i].cpf == cpfDestino) {
+            for (int i = 0; i < Clientes->qtd; i++) {
+                if (Clientes->Clientes[i].cpf == cpfDestino) {
                     indexDestino = i;
                     break;
                 }
             }
-// Verifica se a conta de destino foi encontrada
+// solicita valor a ser transferido
             if (indexDestino != -1) {
-                // Solicita e lê o valor a ser transferido
                 printf("Digite o valor a ser transferido: ");
                 scanf("%lf", &valor);
-// Verifica se o valor é válido e realiza a transferência
-                if (valor > 0 && valor <= Clientes[indexOrigem].saldoatual) {
-                    Clientes[indexOrigem].saldoatual -= valor;
-                    Clientes[indexDestino].saldoatual += valor;
+
+                double saldo_atual_origem = Clientes->Clientes[indexOrigem].saldoatual - valor;
+                double saldo_atual_destino = Clientes->Clientes[indexDestino].saldoatual + valor;
+// confere se está certo o valor e da para ser debitado de acordo com os limites e saldo
+                if (saldo_atual_origem >= -MAX_SALDO_COMUM && saldo_atual_origem >= -MAX_SALDO_PLUS) {
+                    Clientes->Clientes[indexOrigem].saldoatual = saldo_atual_origem;
+                    Clientes->Clientes[indexDestino].saldoatual = saldo_atual_destino;
                     printf("Transferência realizada com sucesso.\n");
                 } else {
-                    printf("Valor inválido ou insuficiente na conta de origem.\n");
+                    printf("Limite de saldo excedido.\n");
                 }
             } else {
                 printf("Conta de destino não encontrada.\n");
@@ -241,37 +229,37 @@ void transferencia(clientedesc *Clientes) {
         printf("Conta de origem não encontrada.\n");
     }
 }
-// Função para salvar os dados dos clientes em um arquivo binário
+// funcao de salvar as infos
 void salvarClientes(totalclientes *Clientes) {
     FILE *arquivo = fopen("clientes.bin", "wb");
-   // Abre o arquivo para escrita binária
+// abre arquivo 
     if (arquivo == NULL) {
         printf("Erro ao abrir o arquivo para salvar os clientes.\n");
         return;
     }
- // Verifica se o arquivo foi aberto corretamente
+
     if (fwrite(Clientes, sizeof(totalclientes), 1, arquivo) == 1) {
         fclose(arquivo);
-        printf("Os Dados foram salvos com sucesso.\n");
+        printf("Dados salvos com sucesso.\n");
     } else {
         fclose(arquivo);
         printf("Erro ao salvar os dados.\n");
     }
 }
-// Função para carregar os dados dos clientes de um arquivo binário
-void carregarClientes(totalclientes *Clientes) 
-  // Abre o arquivo para leitura binária{
+// carrega os clientes a partir de um arquivo usado anteriormente
+void carregarClientes(totalclientes *Clientes) {
     FILE *arquivo = fopen("clientes.bin", "rb");
- // Verifica se o arquivo foi aberto corretamente
+// abrindo
     if (arquivo == NULL) {
         printf("Arquivo não encontrado. Criando novo arquivo...\n");
         salvarClientes(Clientes);
         return;
     }
-// Lê os dados dos clientes do arquivo
+// criando arquivo caso não tenha
     if (fread(Clientes, sizeof(totalclientes), 1, arquivo) == 1) {
         fclose(arquivo);
         printf("Dados carregados com sucesso!\n");
+        // carregou e fechou
     } else {
         fclose(arquivo);
         printf("Erro ao carregar os dados.\n");
