@@ -36,13 +36,14 @@ int main() {
                 NovoCliente(&TodosClientes);    // Chama a função para cadastrar um novo cliente
                 salvarClientes(&TodosClientes);    // Salva os clientes atualizados no arquivo
                 break;
-            case 2:
-                long cpf;
-                printf("Digite o CPF do cliente a ser apagado: ");
-                scanf("%ld", &cpf);
-                ApagarCliente(&TodosClientes, cpf);    // Chama a função para apagar um cliente
-                salvarClientes(&TodosClientes);    // Salva os clientes atualizados no arquivo
+            case 2: {
+                long cpf = 0; // define o cpf valor zerado
+                printf("Digite o CPF do cliente a ser apagado: "); // printa 
+                scanf("%ld", &cpf); // le o cpf indicado
+                ApagarCliente(&TodosClientes, cpf); // ativa funcao de apagar cliente
+                salvarClientes(&TodosClientes); // salva após apagar
                 break;
+                }
             case 3:
                 Listarclientes(&TodosClientes);    // Chama a função para listar todos os clientes
                 salvarClientes(&TodosClientes);    // Salva os clientes atualizados no arquivo
